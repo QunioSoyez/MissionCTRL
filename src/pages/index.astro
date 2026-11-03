@@ -1,28 +1,143 @@
 ---
-// Temporary placeholder - replaced in step 5 with the real homepage.
+// Homepage
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+
+const services = [
+  { title: 'Custom software & apps', text: 'Web and mobile apps for members, volunteers, events and the workflows unique to you.' },
+  { title: 'AI & automation',        text: 'Chat assistants, document processing and automated workflows that cut admin overhead.' },
+  { title: 'IT infrastructure',      text: 'Networks, Wi-Fi, workstations, Microsoft 365 or Google Workspace, backups and support.' },
+  { title: 'Websites',               text: 'Accessible, fast sites with donations, calendars, registrations and newsletters built in.' },
+  { title: 'Cybersecurity',          text: 'Security reviews, multi-factor sign-in, password management and staff training.' },
+  { title: 'Church & ministry tech', text: 'Livestreaming, check-in, volunteer scheduling, online giving and church management.' },
+];
+
+const commitments = [
+  { title: 'Sliding-scale pricing', text: 'Fees adjusted to your size and resources.' },
+  { title: 'Pro bono capacity',     text: "Time set aside each year for groups that can't afford help." },
+  { title: 'Grant assistance',      text: 'We help you find grants that fund technology upgrades.' },
+  { title: 'No lock-in',            text: 'You own your systems, data and accounts. Always.' },
+];
 ---
 <Base>
-  <section class="sky sky-home">
+  <!-- Hero -->
+  <section class="sky sky-home" id="sky">
     <div class="stars far"></div>
     <div class="stars"></div>
     <Header />
+
     <main id="main" class="container hero">
       <div class="hero-copy">
-        <p class="eyebrow">Layout test</p>
+        <p class="eyebrow">A nonprofit technology mission</p>
         <h1 class="serif display">Technology for a <em>greater</em> purpose.</h1>
-        <p class="lead">Header and footer test. Try the menu at phone width.</p>
+        <p class="lead">
+          We help churches, ministries, charities and community groups put modern technology to work,
+          so they can help those who help others.
+        </p>
+        <div class="hero-actions">
+          <button type="button" class="btn btn-primary" id="thrust" aria-pressed="false">Full thrust</button>
+          <a href="/services/" class="btn btn-ghost">Our services</a>
+        </div>
       </div>
-      <div class="hero-stage">
+
+      <div class="hero-stage" aria-hidden="true">
         <div class="rocket">
-          <img src="/images/rocket-white.png" alt="" />
+          <img src="/images/rocket-white.png" alt="" width="190" height="205" />
           <div class="rocket-trail"></div>
         </div>
       </div>
     </main>
+
     <div class="clouds" aria-hidden="true"><span></span><span></span><span></span></div>
   </section>
+
+  <!-- Services -->
+  <section class="section-light" id="services">
+    <div class="container section">
+      <div class="section-head">
+        <h2 class="serif h2">What we launch</h2>
+        <p class="lead">Six kinds of help, sized to your organization and your budget.</p>
+      </div>
+      <div class="grid grid-3">
+        {services.map((s) => (
+          <article class="service">
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+          </article>
+        ))}
+      </div>
+      <p style="margin-top: 56px">
+        <a href="/services/" class="btn btn-primary" style="color: var(--navy-900)">See every service</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- How we work -->
+  <section class="container section split" id="how">
+    <div>
+      <h2 class="serif h2" style="margin-bottom: 20px">Cost should never keep a mission <em>grounded.</em></h2>
+      <p class="lead">We're a nonprofit serving nonprofits, and our pricing reflects it.</p>
+    </div>
+    <div class="grid grid-2">
+      {commitments.map((c) => (
+        <div class="card">
+          <h3>{c.title}</h3>
+          <p>{c.text}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Products -->
+  <section class="container section" id="products">
+    <h2 class="serif h2" style="margin-bottom: 40px">Apps we've sent into orbit</h2>
+    <div class="grid grid-products">
+      <a class="product" href="https://jesuschristapp.live">
+        <svg class="product-icon" viewBox="0 0 88 88" role="img" aria-label="Jesus Christ App icon">
+          <rect width="88" height="88" rx="20" fill="#000000" />
+          <rect x="39" y="16" width="10" height="56" fill="#FFFFFF" />
+          <rect x="24" y="30" width="40" height="10" fill="#FFFFFF" />
+        </svg>
+        <div>
+          <h3>Jesus Christ App</h3>
+          <p>Explore, learn about and connect with Jesus Christ.</p>
+          <span class="go">jesuschristapp.live &rarr;</span>
+        </div>
+      </a>
+      <a class="product" href="https://berean.michaelbarnes0.workers.dev/">
+        <img class="product-icon" src="/images/berean-icon.png" alt="Berean app icon" width="92" height="92" />
+        <div>
+          <h3>Berean</h3>
+          <p>Bible study with multiple versions, notes and bookmarks.</p>
+          <span class="go">Open Berean &rarr;</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Call to action -->
+  <section class="container cta">
+    <img src="/images/rocket-white.png" alt="" width="64" height="69" />
+    <h2 class="serif h2">Ready for liftoff?</h2>
+    <p class="lead">Tell us what you're working toward. The first conversation is always free.</p>
+    <div class="cta-links">
+      <a href="/contact/" class="btn btn-primary">Start a project</a>
+      <a href="mailto:help@missionctrl.team">help@missionctrl.team</a>
+      <a href="tel:+17435298247">(743) 529-8247</a>
+    </div>
+  </section>
+
   <Footer />
 </Base>
+
+<script>
+  // "Full thrust" toggles warp speed: stars race, rocket shakes, clouds fall away.
+  const sky = document.getElementById('sky');
+  const btn = document.getElementById('thrust');
+  btn?.addEventListener('click', () => {
+    const on = sky?.classList.toggle('boost') ?? false;
+    btn.textContent = on ? 'Ease off' : 'Full thrust';
+    btn.setAttribute('aria-pressed', String(on));
+  });
+</script>
