@@ -1,0 +1,58 @@
+---
+// Shared page shell: every page wraps its content in <Base>.
+import '../styles/global.css';
+
+interface Props {
+  title?: string;        // page-specific title, e.g. "Services"
+  description?: string;  // shown in search results and link previews
+}
+
+const {
+  title,
+  description = 'Mission CTRL is a North Carolina nonprofit helping churches, ministries, charities and community groups put modern technology to work.',
+} = Astro.props;
+
+const siteName = 'Mission CTRL';
+const fullTitle = title ? `${title} | ${siteName}` : `${siteName} | Technology for a Greater Purpose`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/images/og-image.png', Astro.site);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#0B1430" />
+
+    <!-- Icons -->
+    <link rel="icon" href="/images/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="/images/MissionCTRL_logo_square_64x64.png" />
+    <link rel="apple-touch-icon" href="/images/MissionCTRL_logo_square.png" />
+
+    <!-- Link previews (Facebook, iMessage, Slack, X, etc.) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;600;700&display=swap"
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <slot />
+  </body>
+</html>
