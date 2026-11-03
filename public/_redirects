@@ -1,0 +1,5 @@
+# Old page addresses from the previous site -> new addresses (301 = permanent)
+/about.html     /about/     301
+/services.html  /services/  301
+/contact.html   /contact/   301
+/privacy.html   /privacy/   301

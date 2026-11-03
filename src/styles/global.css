@@ -183,7 +183,7 @@ p { margin: 0; }
 .sky.boost .stars.far { animation-duration: 2.4s; }
 
 .hero {
-  position: relative; z-index: 2; flex: 1;
+  position: relative; z-index: 2; flex: 1; width: 100%;
   display: flex; flex-wrap: wrap; align-items: center; gap: 32px;
   padding-top: 40px;
 }

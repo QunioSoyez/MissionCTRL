@@ -1,0 +1,30 @@
+---
+// "Lost in space" page shown for any URL that doesn't exist.
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+<Base title="Page not found" description="This page drifted out of orbit.">
+  <section class="sky sky-home">
+    <div class="stars far"></div>
+    <div class="stars"></div>
+    <Header />
+    <main id="main" class="container hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Error 404</p>
+        <h1 class="serif display">Lost in <em>space.</em></h1>
+        <p class="lead">The page you're looking for drifted out of orbit, or never launched. Let's get you back on course.</p>
+        <div class="hero-actions">
+          <a href="/" class="btn btn-primary">Return to base</a>
+          <a href="/contact/" class="btn btn-ghost">Contact us</a>
+        </div>
+      </div>
+      <div class="hero-stage" aria-hidden="true">
+        <div class="rocket">
+          <img src="/images/rocket-white.png" alt="" width="190" height="205" style="transform: rotate(-35deg)" />
+        </div>
+      </div>
+    </main>
+  </section>
+  <Footer />
+</Base>
