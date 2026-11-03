@@ -1,0 +1,149 @@
+---
+// Contact page - the form posts to /api/contact (handled by the Cloudflare Worker in step 7b).
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const services = [
+  'Custom software & apps',
+  'AI & automation',
+  'IT infrastructure',
+  'Websites & digital presence',
+  'Cybersecurity & data protection',
+  'Technology strategy',
+  'Church & ministry technology',
+  'Not sure yet',
+];
+---
+<Base title="Contact" description="Tell Mission CTRL about your organization and what you're working toward. We'll get back to you soon.">
+  <section class="sky sky-page">
+    <div class="stars far"></div>
+    <div class="stars"></div>
+    <Header />
+    <div class="container page-hero">
+      <p class="eyebrow">Contact</p>
+      <h1 class="serif display">Let's plan your <em>launch.</em></h1>
+      <p class="lead">Tell us about your organization and what you're working toward. We'll get back to you soon.</p>
+    </div>
+  </section>
+
+  <main id="main" class="container section split" style="padding-bottom: 120px">
+    <!-- Direct contact details -->
+    <div style="display: flex; flex-direction: column; gap: 28px">
+      <div>
+        <h2 class="serif" style="font-size: 36px; margin-bottom: 8px">Prefer to reach out directly?</h2>
+        <p class="muted">Email, call or text. Whatever's easiest for you.</p>
+      </div>
+      <div class="card">
+        <h3>Email</h3>
+        <p><a href="mailto:help@missionctrl.team">help@missionctrl.team</a></p>
+      </div>
+      <div class="card">
+        <h3>Phone</h3>
+        <p><a href="tel:+17435298247">(743) 529-8247</a></p>
+      </div>
+      <div class="card">
+        <h3>Location</h3>
+        <p>North Wilkesboro, North Carolina</p>
+      </div>
+    </div>
+
+    <!-- Form -->
+    <form class="form" id="contact-form" action="/api/contact" method="post" novalidate>
+      <div class="form-row">
+        <div class="field">
+          <label for="name">Your name *</label>
+          <input id="name" name="name" type="text" required maxlength="100" autocomplete="name" />
+        </div>
+        <div class="field">
+          <label for="email">Email *</label>
+          <input id="email" name="email" type="email" required maxlength="200" autocomplete="email" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="phone">Phone</label>
+          <input id="phone" name="phone" type="tel" maxlength="40" autocomplete="tel" />
+        </div>
+        <div class="field">
+          <label for="organization">Organization</label>
+          <input id="organization" name="organization" type="text" maxlength="150" autocomplete="organization" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="service">What can we help with?</label>
+        <select id="service" name="service">
+          {services.map((s) => <option value={s}>{s}</option>)}
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="message">Tell us about your project *</label>
+        <textarea id="message" name="message" required maxlength="5000"></textarea>
+      </div>
+
+      <!-- Spam trap: hidden from people, bots tend to fill it in -->
+      <div class="hp-field" aria-hidden="true">
+        <label for="website">Leave this empty</label>
+        <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <p class="form-status" id="form-status" role="status" hidden></p>
+
+      <div>
+        <button type="submit" class="btn btn-primary" id="submit-btn">Send message</button>
+      </div>
+      <p class="hint" style="font-size: 14px; color: var(--text-dim)">
+        We only use your details to reply to you. See our <a href="/privacy/">privacy policy</a>.
+      </p>
+    </form>
+  </main>
+
+  <Footer />
+</Base>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const status = document.getElementById('form-status') as HTMLElement | null;
+  const button = document.getElementById('submit-btn') as HTMLButtonElement | null;
+
+  function show(kind: 'ok' | 'err', text: string) {
+    if (!status) return;
+    status.className = `form-status ${kind}`;
+    status.textContent = text;
+    status.hidden = false;
+  }
+
+  // Shows a confirmation if the page was reached by the no-JavaScript fallback redirect.
+  const params = new URLSearchParams(location.search);
+  if (params.get('sent') === '1') show('ok', "Thanks! Your message is on its way. We'll be in touch soon.");
+  if (params.get('sent') === '0') show('err', 'Something went wrong. Please email help@missionctrl.team instead.');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+    button!.disabled = true;
+    button!.textContent = 'Sending…';
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' },
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Send failed');
+      form.reset();
+      show('ok', "Thanks! Your message is on its way. We'll be in touch soon.");
+    } catch (err) {
+      show('err', `${(err as Error).message}. Please try again, or email help@missionctrl.team.`);
+    } finally {
+      button!.disabled = false;
+      button!.textContent = 'Send message';
+    }
+  });
+</script>

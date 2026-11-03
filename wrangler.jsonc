@@ -1,0 +1,26 @@
+// Cloudflare Worker configuration for missionctrl.team
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "missionctrl",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-10-01",
+
+  // The built Astro site. The Worker script only runs first for /api/* routes;
+  // every other request is served straight from these files.
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
+  },
+
+  // Lets the Worker email the contact form to the verified Email Routing destination only.
+  "send_email": [
+    {
+      "name": "EMAIL",
+      "allowed_destination_addresses": ["barnes0003@proton.me"]
+    }
+  ],
+
+  // Keeps request logs in the Cloudflare dashboard (Workers > missionctrl > Logs).
+  "observability": { "enabled": true }
+}
