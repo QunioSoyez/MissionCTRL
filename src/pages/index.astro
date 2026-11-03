@@ -1,16 +1,19 @@
 ---
 // Temporary placeholder - replaced in step 5 with the real homepage.
 import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 ---
 <Base>
   <section class="sky sky-home">
     <div class="stars far"></div>
     <div class="stars"></div>
+    <Header />
     <main id="main" class="container hero">
       <div class="hero-copy">
         <p class="eyebrow">Layout test</p>
         <h1 class="serif display">Technology for a <em>greater</em> purpose.</h1>
-        <p class="lead">If you can read this in the new fonts over drifting stars, steps 2 and 3 are working.</p>
+        <p class="lead">Header and footer test. Try the menu at phone width.</p>
       </div>
       <div class="hero-stage">
         <div class="rocket">
@@ -21,4 +24,5 @@ import Base from '../layouts/Base.astro';
     </main>
     <div class="clouds" aria-hidden="true"><span></span><span></span><span></span></div>
   </section>
+  <Footer />
 </Base>

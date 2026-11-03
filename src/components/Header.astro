@@ -1,0 +1,49 @@
+---
+// Site header: logo, main navigation and the mobile menu.
+// Place it inside the page's .sky section so it sits over the stars.
+const links = [
+  { href: '/services/', label: 'Services' },
+  { href: '/about/',    label: 'About' },
+  { href: '/#products', label: 'Products' },
+  { href: '/contact/',  label: 'Contact' },
+];
+
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => !href.includes('#') && path.startsWith(href);
+---
+<header class="site-header">
+  <div class="container">
+    <a href="/" class="brand" aria-label="Mission CTRL home">
+      <img src="/images/rocket-white.png" alt="" width="32" height="35" />
+      <span>Mission CTRL</span>
+    </a>
+
+    <nav class="nav" aria-label="Main">
+      {links.map((l) => (
+        <a href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined}>{l.label}</a>
+      ))}
+      <a href="/contact/" class="btn btn-primary btn-sm">Start a project</a>
+    </nav>
+
+    <details class="nav-mobile">
+      <summary aria-label="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <line x1="4" y1="7" x2="20" y2="7" /><line x1="4" y1="12" x2="20" y2="12" /><line x1="4" y1="17" x2="20" y2="17" />
+        </svg>
+      </summary>
+      <nav class="nav-panel" aria-label="Mobile">
+        {links.map((l) => (
+          <a href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined}>{l.label}</a>
+        ))}
+        <a href="/contact/" class="btn btn-primary btn-sm">Start a project</a>
+      </nav>
+    </details>
+  </div>
+</header>
+
+<script>
+  // Close the mobile menu after tapping a link (e.g. "Products" on the same page).
+  document.querySelectorAll('.nav-mobile a').forEach((a) =>
+    a.addEventListener('click', () => a.closest('details')?.removeAttribute('open'))
+  );
+</script>
