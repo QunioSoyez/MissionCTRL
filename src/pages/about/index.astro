@@ -1,0 +1,125 @@
+---
+// About page - mission, values, board and location.
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const values = [
+  { title: 'Mission first',          text: 'Every technology decision starts with your mission, not our portfolio.' },
+  { title: 'Integrity',              text: 'Honest about what technology can and can’t do. No hidden fees, no surprises.' },
+  { title: 'Partnership',            text: 'We stick around after launch and invest in your long-term success.' },
+  { title: 'Stewardship',            text: 'We treat your budget like it matters, because it does.' },
+  { title: 'Accessibility',          text: 'We build for everyone, following accessibility guidelines from day one.' },
+  { title: 'Always learning',        text: 'Technology moves fast. We keep up so you don’t have to.' },
+];
+
+const board = [
+  { name: 'Michael Barnes',     role: 'President' },
+  { name: 'Antinette Atherton', role: 'Treasurer' },
+  { name: 'Kimberly Ellis',     role: 'Secretary' },
+  { name: 'Jim Palombit',       role: 'Director' },
+];
+---
+<Base
+  title="About"
+  description="Mission CTRL is a North Carolina nonprofit that helps churches, ministries, charities and community groups use technology to serve others."
+>
+  <section class="sky sky-page">
+    <div class="stars far"></div>
+    <div class="stars"></div>
+    <Header />
+    <div class="container page-hero">
+      <p class="eyebrow">About us</p>
+      <h1 class="serif display">Help those who help <em>others.</em></h1>
+      <p class="lead">That's the whole mission. Everything else is how we get there.</p>
+    </div>
+  </section>
+
+  <main id="main">
+    <!-- Mission -->
+    <section class="section-light">
+      <div class="container section split">
+        <div>
+          <h2 class="serif h2">Why we exist</h2>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 18px; font-size: 19px; line-height: 1.7">
+          <p>
+            The organizations doing the most important work in our communities, feeding the hungry, sheltering
+            the homeless, caring for the sick and nurturing spiritual growth, deserve technology that works as
+            hard as they do.
+          </p>
+          <p class="muted">
+            Too often they're held back by outdated systems, limited technical help and tight budgets.
+            Mission CTRL closes that gap by bringing professional technology skills to nonprofits, churches
+            and ministries at prices they can afford.
+          </p>
+          <p class="muted">
+            We also build and maintain our own faith-based apps, including the
+            <a href="https://jesuschristapp.live">Jesus Christ App</a> and
+            <a href="https://berean.michaelbarnes0.workers.dev/">Berean</a>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Values -->
+    <section class="container section" id="values">
+      <div class="section-head">
+        <h2 class="serif h2">What guides <em>us</em></h2>
+      </div>
+      <div class="grid grid-2" style="grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr))">
+        {values.map((v) => (
+          <div class="card">
+            <h3>{v.title}</h3>
+            <p>{v.text}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Board -->
+    <section class="container section" id="board">
+      <div class="section-head">
+        <h2 class="serif h2">Board of directors</h2>
+        <p class="lead">Our volunteer board provides governance, direction and oversight.</p>
+      </div>
+      <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 32px">
+        {board.map((m) => (
+          <div class="person">
+            <h3>{m.name}</h3>
+            <p>{m.role}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Location -->
+    <section class="container section" id="location">
+      <div class="card" style="display: flex; flex-wrap: wrap; gap: 32px; justify-content: space-between; align-items: center; padding: 40px">
+        <div style="flex: 1 1 420px; min-width: 0">
+          <h2 class="serif" style="font-size: 40px; margin-bottom: 12px">Based in North Wilkesboro, NC</h2>
+          <p>
+            We serve organizations in the Wilkes County area in person, and anywhere in the country remotely.
+          </p>
+        </div>
+        <address style="font-style: normal; line-height: 1.7; color: var(--text-muted)">
+          <strong style="color: var(--text)">Mission CTRL</strong><br />
+          2797 Windy Ridge Rd<br />
+          North Wilkesboro, NC 28659
+        </address>
+      </div>
+    </section>
+  </main>
+
+  <section class="container cta">
+    <img src="/images/rocket-white.png" alt="" width="64" height="69" />
+    <h2 class="serif h2">Let's work together.</h2>
+    <p class="lead">Whether you need a hand or want to lend one, we'd love to hear from you.</p>
+    <div class="cta-links">
+      <a href="/contact/" class="btn btn-primary">Get in touch</a>
+      <a href="mailto:help@missionctrl.team">help@missionctrl.team</a>
+    </div>
+  </section>
+
+  <Footer />
+</Base>
