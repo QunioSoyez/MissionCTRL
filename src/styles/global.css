@@ -130,7 +130,8 @@ p { margin: 0; }
 }
 .nav a:not(.btn):hover,
 .nav a[aria-current="page"] { color: var(--text); }
-.nav a[aria-current="page"] { text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 6px; }
+.nav a[aria-current="page"]:not(.btn),
+.nav-mobile .nav-panel a[aria-current="page"]:not(.btn) { color: var(--gold); text-decoration: underline; text-decoration-thickness: 2px; text-decoration-color: var(--gold); text-underline-offset: 8px; }
 
 /* Mobile menu uses <details> - no JavaScript needed */
 .nav-mobile { display: none; position: relative; }

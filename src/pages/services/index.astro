@@ -1,0 +1,174 @@
+---
+// Services page - full list of what Mission CTRL offers.
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const categories = [
+  {
+    id: 'custom-software',
+    title: 'Custom software & apps',
+    intro: 'Applications built around how your organization actually works.',
+    items: [
+      'Custom web applications',
+      'iOS and Android apps',
+      'Church and ministry apps',
+      'Member and volunteer management',
+      'Event registration and management',
+      'Custom dashboards and reporting',
+      'Maintenance and support for existing apps',
+    ],
+  },
+  {
+    id: 'ai-automation',
+    title: 'AI & automation',
+    intro: 'Practical AI that gives your team time back.',
+    items: [
+      'Website chat assistants and FAQ bots',
+      'Document processing and data extraction',
+      'Automated email responses',
+      'AI-assisted content creation',
+      'Grant research and writing assistance',
+      'Searchable knowledge bases',
+      'Workflow automation',
+    ],
+  },
+  {
+    id: 'it-infrastructure',
+    title: 'IT infrastructure',
+    intro: 'Dependable everyday technology, set up right.',
+    items: [
+      'Computer and workstation setup',
+      'Windows, macOS and Linux support',
+      'Network and Wi-Fi installation',
+      'Microsoft 365 and Google Workspace',
+      'Email setup and migration',
+      'Cloud storage and backups',
+      'Hardware and software recommendations',
+      'Ongoing IT support agreements',
+    ],
+  },
+  {
+    id: 'websites',
+    title: 'Websites & digital presence',
+    intro: 'A site your community can find, use and act on.',
+    items: [
+      'New websites and redesigns',
+      'Hosting and maintenance',
+      'Domains and DNS',
+      'Search engine optimization',
+      'Accessibility improvements',
+      'Donation and fundraising integrations',
+      'Event calendars, registrations and newsletters',
+    ],
+  },
+  {
+    id: 'cybersecurity',
+    title: 'Cybersecurity & data protection',
+    intro: 'Protect the people and information you are trusted with.',
+    items: [
+      'Security assessments',
+      'Security configuration and hardening',
+      'Multi-factor authentication',
+      'Password management',
+      'Backup and disaster recovery planning',
+      'Staff security awareness training',
+      'Data protection policies and access reviews',
+    ],
+  },
+  {
+    id: 'strategy',
+    title: 'Technology strategy',
+    intro: 'Know what to fix first and what it will cost.',
+    items: [
+      'Technology assessments',
+      'IT roadmaps and planning',
+      'Process mapping and workflow improvement',
+      'Software selection and rollout',
+      'Database design and data cleanup',
+      'Reporting and analytics',
+      'Technology budgeting',
+    ],
+  },
+  {
+    id: 'church-ministry',
+    title: 'Church & ministry technology',
+    intro: 'Tools built for congregations and ministries.',
+    items: [
+      'Church websites and apps',
+      'Sermon and livestream integration',
+      'Children’s ministry check-in',
+      'Volunteer scheduling',
+      'Prayer request management',
+      'Online giving',
+      'Digital signage and announcements',
+      'Audio/video consulting',
+      'Church management software setup',
+    ],
+  },
+];
+
+const extras = [
+  'Technology training for staff and volunteers',
+  'Cloud migration',
+  'IT procurement help',
+  'Network cabling, cameras and access points',
+  'Email campaigns and newsletters',
+  'Connecting the apps you already use',
+];
+---
+<Base
+  title="Services"
+  description="Custom apps, AI and automation, IT infrastructure, websites, cybersecurity, technology strategy and church technology for nonprofits."
+>
+  <section class="sky sky-page">
+    <div class="stars far"></div>
+    <div class="stars"></div>
+    <Header />
+    <div class="container page-hero">
+      <p class="eyebrow">Services</p>
+      <h1 class="serif display">Everything your mission needs to get off the <em>ground.</em></h1>
+      <p class="lead">Pick one service or combine several. Every engagement starts with a conversation about what you're trying to accomplish.</p>
+      <nav aria-label="Service categories" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px">
+        {categories.map((c) => (
+          <a href={`#${c.id}`} class="btn btn-ghost btn-sm">{c.title}</a>
+        ))}
+      </nav>
+    </div>
+  </section>
+
+  <main id="main" class="section-light">
+    <div class="container section">
+      <div class="grid grid-3">
+        {categories.map((c) => (
+          <article class="service" id={c.id} style="scroll-margin-top: 24px">
+            <h2 style="font-size: 26px; font-weight: 700; margin-bottom: 8px">{c.title}</h2>
+            <p>{c.intro}</p>
+            <ul>
+              {c.items.map((item) => <li>{item}</li>)}
+            </ul>
+          </article>
+        ))}
+        <article class="service" id="more" style="scroll-margin-top: 24px">
+          <h2 style="font-size: 26px; font-weight: 700; margin-bottom: 8px">And more</h2>
+          <p>Smaller jobs that make a big difference.</p>
+          <ul>
+            {extras.map((item) => <li>{item}</li>)}
+          </ul>
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <section class="container cta">
+    <img src="/images/rocket-white.png" alt="" width="64" height="69" />
+    <h2 class="serif h2">Not sure where to start?</h2>
+    <p class="lead">Tell us what's slowing your team down. We'll help you figure out what to tackle first.</p>
+    <div class="cta-links">
+      <a href="/contact/" class="btn btn-primary">Start a project</a>
+      <a href="mailto:help@missionctrl.team">help@missionctrl.team</a>
+    </div>
+  </section>
+
+  <Footer />
+</Base>
