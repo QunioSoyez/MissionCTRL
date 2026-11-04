@@ -4,7 +4,7 @@ import Base from '../../layouts/Base.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 
-const updated = 'November 2, 2026';
+const updated = 'November 4, 2026';
 ---
 <Base title="Privacy Policy" description="How Mission CTRL handles the information you share through missionctrl.team.">
   <section class="sky sky-page">
@@ -53,6 +53,10 @@ const updated = 'November 2, 2026';
         <li>
           <strong>Cloudflare</strong> hosts the website and delivers contact form messages to our inbox.
           Like any web host, it handles standard request information such as your IP address and browser type.
+        </li>
+        <li>
+          <strong>Cloudflare Turnstile</strong> checks that contact form messages come from a person rather than a
+          spam bot. It looks at technical signals from your browser to do this, and is not used for advertising.
         </li>
         <li>
           <strong>Google Fonts</strong> supplies the typefaces on this site, so your browser connects to

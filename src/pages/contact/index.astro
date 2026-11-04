@@ -90,6 +90,12 @@ const services = [
         <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
       </div>
 
+      <!-- When the page loaded (set by script below); the Worker rejects instant, bot-speed submissions -->
+      <input type="hidden" name="t" id="form-t" value="" />
+
+      <!-- Cloudflare Turnstile bot check renders here -->
+      <div id="turnstile" style="min-height: 65px"></div>
+
       <p class="form-status" id="form-status" role="status" hidden></p>
 
       <div>
@@ -104,8 +110,22 @@ const services = [
   <Footer />
 </Base>
 
+<!-- Cloudflare Turnstile: loads the widget. On localhost it uses Cloudflare's always-pass test key. -->
+<script is:inline>
+  window.onTurnstileLoad = function () {
+    var local = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    window.turnstile.render('#turnstile', {
+      sitekey: local ? '1x00000000000000000000AA' : '0x4AAAAAAFzXsSA8GNyoVNUs',
+      theme: 'dark',
+    });
+  };
+</script>
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad" async defer></script>
+
 <script>
   const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const started = document.getElementById('form-t') as HTMLInputElement | null;
+  if (started) started.value = String(Date.now());
   const status = document.getElementById('form-status') as HTMLElement | null;
   const button = document.getElementById('submit-btn') as HTMLButtonElement | null;
 
@@ -138,10 +158,13 @@ const services = [
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || 'Send failed');
       form.reset();
+      if (started) started.value = String(Date.now());
       show('ok', "Thanks! Your message is on its way. We'll be in touch soon.");
     } catch (err) {
       show('err', `${(err as Error).message}. Please try again, or email help@missionctrl.team.`);
     } finally {
+      // Each Turnstile check works only once, so get a fresh one for the next message.
+      (window as any).turnstile?.reset('#turnstile');
       button!.disabled = false;
       button!.textContent = 'Send message';
     }

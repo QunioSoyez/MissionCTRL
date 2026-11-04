@@ -45,6 +45,18 @@ async function handleContact(request, env) {
   // Spam trap: real people never see this field. Pretend success so bots move on.
   if (field('website', 200)) return reply(true, null, 200);
 
+  // Speed trap: the page records when it loaded. Missing, or sent under 3 seconds later = bot.
+  // (A negative gap just means the visitor's clock is ahead, so that's allowed.)
+  const startedAt = Number(form.get('t'));
+  const elapsed = Date.now() - startedAt;
+  if (!startedAt || (elapsed >= 0 && elapsed < 3000)) return reply(true, null, 200);
+
+  // Cloudflare Turnstile: confirm the visitor passed the bot check.
+  const human = await verifyTurnstile(form.get('cf-turnstile-response'), request, env);
+  if (!human) {
+    return reply(false, 'The bot check did not pass. Please wait for the check to finish and try again', 400);
+  }
+
   const name = field('name', 100);
   const email = field('email', 200);
   const phone = field('phone', 40);
@@ -84,5 +96,30 @@ async function handleContact(request, env) {
   } catch (err) {
     console.error('Contact form send failed:', err && (err.code || ''), err && err.message);
     return reply(false, 'Sorry, your message could not be sent', 502);
+  }
+}
+
+// Asks Cloudflare whether the Turnstile token from the form is valid. Each token works only once.
+async function verifyTurnstile(token, request, env) {
+  if (!env.TURNSTILE_SECRET) {
+    console.error('TURNSTILE_SECRET is not set');
+    return false;
+  }
+  if (!token) return false;
+
+  const body = new FormData();
+  body.append('secret', env.TURNSTILE_SECRET);
+  body.append('response', String(token));
+  const ip = request.headers.get('CF-Connecting-IP');
+  if (ip) body.append('remoteip', ip);
+
+  try {
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body });
+    const data = await res.json();
+    if (!data.success) console.warn('Turnstile rejected:', JSON.stringify(data['error-codes']));
+    return data.success === true;
+  } catch (err) {
+    console.error('Turnstile verify failed:', err && err.message);
+    return false;
   }
 }
