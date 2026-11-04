@@ -94,7 +94,7 @@ const services = [
       <input type="hidden" name="t" id="form-t" value="" />
 
       <!-- Cloudflare Turnstile bot check renders here -->
-      <div id="turnstile" style="min-height: 65px"></div>
+      <div id="ts-box" style="min-height: 65px"></div>
 
       <p class="form-status" id="form-status" role="status" hidden></p>
 
@@ -110,11 +110,24 @@ const services = [
   <Footer />
 </Base>
 
+<style is:global>
+  /* "Sending" state for the contact form */
+  .form-status.info { background: #13204A; color: #C9CEDC; border: 1px solid #3A4670; }
+  #submit-btn:disabled { opacity: .85; cursor: progress; }
+  #submit-btn .spinner {
+    width: 18px; height: 18px; border-radius: 50%;
+    border: 2px solid rgba(11, 20, 48, .25); border-top-color: #0B1430;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { #submit-btn .spinner { animation-duration: 2.4s; } }
+</style>
+
 <!-- Cloudflare Turnstile: loads the widget. On localhost it uses Cloudflare's always-pass test key. -->
 <script is:inline>
   window.onTurnstileLoad = function () {
     var local = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-    window.turnstile.render('#turnstile', {
+    window.turnstile.render('#ts-box', {
       sitekey: local ? '1x00000000000000000000AA' : '0x4AAAAAAFzXsSA8GNyoVNUs',
       theme: 'dark',
     });
@@ -129,7 +142,7 @@ const services = [
   const status = document.getElementById('form-status') as HTMLElement | null;
   const button = document.getElementById('submit-btn') as HTMLButtonElement | null;
 
-  function show(kind: 'ok' | 'err', text: string) {
+  function show(kind: 'ok' | 'err' | 'info', text: string) {
     if (!status) return;
     status.className = `form-status ${kind}`;
     status.textContent = text;
@@ -148,7 +161,8 @@ const services = [
       return;
     }
     button!.disabled = true;
-    button!.textContent = 'Sending…';
+    button!.innerHTML = '<span class="spinner" aria-hidden="true"></span> Sending…';
+    show('info', 'Checking your message and sending it. This takes a few seconds…');
     try {
       const res = await fetch(form.action, {
         method: 'POST',
@@ -164,7 +178,8 @@ const services = [
       show('err', `${(err as Error).message}. Please try again, or email help@missionctrl.team.`);
     } finally {
       // Each Turnstile check works only once, so get a fresh one for the next message.
-      (window as any).turnstile?.reset('#turnstile');
+      const ts = (window as any).turnstile;
+      if (ts && typeof ts.reset === 'function') ts.reset('#ts-box');
       button!.disabled = false;
       button!.textContent = 'Send message';
     }
